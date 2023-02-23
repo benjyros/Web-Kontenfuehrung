@@ -9,6 +9,18 @@ import { auth } from './config';
 import { onAuthStateChanged } from 'firebase/auth';
 
 function App() {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.replace("Home");
+      } else {
+        setEmail("");
+        setPassword("");
+      }
+      return unsubscribe;
+    });
+  }, []);
+
   return (
     <div className='App'>
       <Routes>
