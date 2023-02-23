@@ -43,6 +43,7 @@ function Navbar() {
                 <a class="btn">Get started</a>
                 <p>test</p>
                 <p>test2</p>
+                <p>test3</p>
             </div>
         </div>
     );
