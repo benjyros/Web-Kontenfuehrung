@@ -42,6 +42,7 @@ function Navbar() {
             <div class="navbar-end">
                 <a class="btn">Get started</a>
                 <p>test</p>
+                <p>test2</p>
             </div>
         </div>
     );
