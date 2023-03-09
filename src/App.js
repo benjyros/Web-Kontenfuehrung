@@ -4,6 +4,7 @@ import './App.css';
 import Home from './Home';
 import Login from './Login';
 import Registration from './Registration';
+import CreateAccount from './CreateAccount';
 
 import { auth } from './config';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -15,6 +16,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/home' element={<Home />} />
         <Route path='/registration' element={<Registration />} />
+        <Route path='/createAccount' element={<CreateAccount />} />
       </Routes>
     </div>
 
