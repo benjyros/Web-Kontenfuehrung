@@ -20,7 +20,6 @@ export default function Login() {
         });
     }, []);
 
-
     const handleSignIn = (event) => {
         event.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
