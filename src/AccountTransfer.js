@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import createTransferDoc from "./functions/transaction";
+
 import { auth, firestore } from "./config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, query, where, updateDoc } from "firebase/firestore";
 
 export default function AccountTransfer() {
     const [debitAcc, setDebitAcc] = useState("");
@@ -16,12 +17,84 @@ export default function AccountTransfer() {
     const [accounts, setAccounts] = useState([]);
     const [debitAccs, setDebitAccs] = useState([]);
 
-    const preTransfer = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        function fetchData() {
+            // Defining all types of accounts
+            var types = ["Privatkonto", "Sparkonto"];
+            // Defining array for all accounts
+            var debitAccs = [];
+            var accounts = [];
+            //Looping through all types of accounts
+            for (let i = 0; i < types.length; i++) {
+                getDocs(query(collection(firestore, "users", auth.currentUser.uid, "accounts"), where("type", "==", types[i])))
+                    .then((snapshot) => {
+                        snapshot.forEach((doc) => {
+                            // Get specific datas out of the document
+                            const getType = () => {
+                                if (i === 0) {
+                                    return doc.data().type;
+                                } else {
+                                    return doc.data().type + " " + accounts.length;
+                                }
+                            }
+                            const newAccount = {
+                                label: getType() + ": " + doc.data().iban + " - " + doc.data().balance + " CHF",
+                                value: doc.data().iban
+                            };
+                            // Put datas into array for all accounts
+                            if (doc.data().balance != "0") {
+                                debitAccs[debitAccs.length] = newAccount;
+                            }
+                            accounts[accounts.length] = newAccount;
+                        });
+                        // Set useState with the accounts
+                        setAccounts(accounts);
+                        setDebitAccs(debitAccs);
+                    }).catch((error) => {
+                        console.log("Error getting documents: ", error);
+                    });
+            }
+
+        };
+        fetchData();
+    }, []);
+
+    const preTransfer = (event) => {
+        event.preventDefault();
         if (debitAcc === creditAcc) {
             alert("Sie können nicht auf das gleiche Konto transferieren.");
         } else {
-            //transfer();
+            transfer();
         }
+    }
+
+    const transfer = () => {
+        const debitRef = doc(firestore, "users", auth.currentUser.uid, "accounts", debitAcc);
+        const creditRef = doc(firestore, "users", auth.currentUser.uid, "accounts", creditAcc);
+
+        const debitSnap = getDoc(debitRef);
+        const creditSnap = getDoc(creditRef);
+
+        if (Number(debitSnap.data().balance) < Number(amount)) {
+            alert("Der Betrag ist zu hoch als das Ihr Konto zur Verfügung hat.");
+        } else {
+            updateDoc(debitRef, {
+                balance: (Number(debitSnap.data().balance) - Number(amount))
+            });
+
+            updateDoc(creditRef, {
+                balance: (Number(creditSnap.data().balance) + Number(amount))
+            });
+            createTransaction();
+        }
+    }
+
+    const createTransaction = () => {
+        const userSnap = getDoc(doc(firestore, "users", auth.currentUser.uid));
+        createTransferDoc(auth.currentUser.uid, auth.currentUser.uid, userSnap.data().surname, userSnap.data().name, userSnap.data().surname, userSnap.data().name, debitAcc, creditAcc, amount, comment, "Kontoübertrag");
+        navigate('/home', { replace: true });;
     }
 
     return (
@@ -33,24 +106,20 @@ export default function AccountTransfer() {
                 <form className="space-y-4 md:space-y-6" onSubmit={preTransfer}>
                     <div>
                         <label htmlFor="debitAcc" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Belastungskonto</label>
-                        <select onChange={(e) => setDebitAcc(e.target.value)} name="debitAcc" id="debitAcc" className="select w-full max-w-xs" required="true">
-                            <option disabled selected>Wähle ein Belastungskonto aus</option>
-                            <option>Homer</option>
-                            <option>Marge</option>
-                            <option>Bart</option>
-                            <option>Lisa</option>
-                            <option>Maggie</option>
+                        <select onChange={(e) => setDebitAcc(e.target.value)} name="debitAcc" id="debitAcc" className="select w-full max-w-xs" required={true}>
+                            <option disabled value>Wähle ein Belastungskonto aus</option>
+                            {debitAccs.map((account) => (
+                                <option key={account.value} value={account.value}>{account.label}</option>
+                            ))}
                         </select>
                     </div>
                     <div>
                         <label htmlFor="creditAcc" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Belastungskonto</label>
-                        <select onChange={(e) => setCreditAcc(e.target.value)} name="creditAcc" id="creditAcc" className="select w-full max-w-xs" required="true">
-                            <option disabled selected>Wähle ein Gutschriftskonto aus</option>
-                            <option>Homer</option>
-                            <option>Marge</option>
-                            <option>Bart</option>
-                            <option>Lisa</option>
-                            <option>Maggie</option>
+                        <select onChange={(e) => setCreditAcc(e.target.value)} name="creditAcc" id="creditAcc" className="select w-full max-w-xs" required={true}>
+                            <option disabled value>Wähle ein Gutschriftskonto aus</option>
+                            {accounts.map((account) => (
+                                <option key={account.value} value={account.value}>{account.label}</option>
+                            ))}
                         </select>
                     </div>
                     <div>
@@ -59,7 +128,7 @@ export default function AccountTransfer() {
                     <div>
                         <div className="form-control">
                             <label className="input-group">
-                                <input type="number" min="0" placeholder="Betrag eingeben" onChange={(e) => setAmount(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="true" />
+                                <input type="number" min="0" placeholder="Betrag eingeben" onChange={(e) => setAmount(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required={true} />
                                 <span>CHF</span>
                             </label>
                         </div>
