@@ -12,8 +12,6 @@ export default function AccountTransfer() {
     const [amount, setAmount] = useState("");
     const [comment, setComment] = useState("");
 
-    const [openDebitAcc, setOpenDebitAcc] = useState(false);
-    const [openCreditAcc, setOpenCreditAcc] = useState(false);
     const [accounts, setAccounts] = useState([]);
     const [debitAccs, setDebitAccs] = useState([]);
 
@@ -31,16 +29,8 @@ export default function AccountTransfer() {
                 getDocs(query(collection(firestore, "users", auth.currentUser.uid, "accounts"), where("type", "==", types[i])))
                     .then((snapshot) => {
                         snapshot.forEach((doc) => {
-                            // Get specific datas out of the document
-                            const getType = () => {
-                                if (i === 0) {
-                                    return doc.data().type;
-                                } else {
-                                    return doc.data().type + " " + accounts.length;
-                                }
-                            }
                             const newAccount = {
-                                label: getType() + ": " + doc.data().iban + " - " + doc.data().balance + " CHF",
+                                label: doc.data().name + ": " + doc.data().iban + " - " + doc.data().balance + " CHF",
                                 value: doc.data().iban
                             };
                             // Put datas into array for all accounts
@@ -114,7 +104,7 @@ export default function AccountTransfer() {
                         </select>
                     </div>
                     <div>
-                        <label htmlFor="creditAcc" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Belastungskonto</label>
+                        <label htmlFor="creditAcc" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Gutschriftskonto</label>
                         <select onChange={(e) => setCreditAcc(e.target.value)} name="creditAcc" id="creditAcc" className="select w-full max-w-xs" required={true}>
                             <option disabled value>Wähle ein Gutschriftskonto aus</option>
                             {accounts.map((account) => (
