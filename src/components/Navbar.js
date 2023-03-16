@@ -35,7 +35,7 @@ function Navbar() {
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
                     <li><a>Zahlung erfassen</a></li>
-                    <li><a>Kontoübertrag</a></li>
+                    <li><Link to='/accountTransfer'>Kontoübertrag</Link></li>
                     <li><Link to='/createAccount'>Sparkonto erstellen</Link></li>
                 </ul>
             </div>
