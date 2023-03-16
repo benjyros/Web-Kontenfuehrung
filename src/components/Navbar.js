@@ -27,7 +27,7 @@ function Navbar() {
                     <ul tabIndex="0" className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                         <li><a>Zahlung erfassen</a></li>
                         <li><a>Kontoübertrag</a></li>
-                        <li><a>Sparkonto erstellen</a></li>
+                        <li><Link to='/createAccount'>Sparkonto erstellen</Link></li>
                     </ul>
                 </div>
                 <Link to='/login' className="btn btn-ghost normal-case text-xl">Twäwis</Link>
@@ -36,7 +36,7 @@ function Navbar() {
                 <ul className="menu menu-horizontal px-1">
                     <li><a>Zahlung erfassen</a></li>
                     <li><a>Kontoübertrag</a></li>
-                    <li><a>Sparkonto erstellen</a></li>
+                    <li><Link to='/createAccount'>Sparkonto erstellen</Link></li>
                 </ul>
             </div>
             <div className="navbar-end">
