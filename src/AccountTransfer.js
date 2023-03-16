@@ -67,23 +67,31 @@ export default function AccountTransfer() {
         const debitSnap = getDoc(debitRef);
         const creditSnap = getDoc(creditRef);
 
-        if (Number(debitSnap.data().balance) < Number(amount)) {
-            alert("Der Betrag ist zu hoch als das Ihr Konto zur Verfügung hat.");
-        } else {
-            updateDoc(debitRef, {
-                balance: (Number(debitSnap.data().balance) - Number(amount))
-            });
+        debitSnap.then((debitDoc) => {
+            if (Number(debitDoc.data().balance) < Number(amount)) {
+                alert("Der Betrag ist zu hoch als das Ihr Konto zur Verfügung hat.");
+            } else {
 
-            updateDoc(creditRef, {
-                balance: (Number(creditSnap.data().balance) + Number(amount))
-            });
-            createTransaction();
-        }
+                updateDoc(debitRef, {
+                    balance: (Number(debitDoc.data().balance) - Number(amount))
+                });
+
+
+                creditSnap.then((creditDoc) => {
+                    updateDoc(creditRef, {
+                        balance: (Number(creditDoc.data().balance) + Number(amount))
+                    });
+                });
+                createTransaction();
+            }
+        });
     }
 
     const createTransaction = () => {
-        const userSnap = getDoc(doc(firestore, "users", auth.currentUser.uid));
-        createTransferDoc(auth.currentUser.uid, auth.currentUser.uid, userSnap.data().surname, userSnap.data().name, userSnap.data().surname, userSnap.data().name, debitAcc, creditAcc, amount, comment, "Kontoübertrag");
+        getDoc(doc(firestore, "users", auth.currentUser.uid))
+        .then((userSnap) => {
+            createTransferDoc(auth.currentUser.uid, auth.currentUser.uid, userSnap.data().surname, userSnap.data().name, userSnap.data().surname, userSnap.data().name, debitAcc, creditAcc, amount, comment, "Kontoübertrag");
+        })
         navigate('/home', { replace: true });;
     }
 
@@ -97,7 +105,7 @@ export default function AccountTransfer() {
                     <div>
                         <label htmlFor="debitAcc" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Belastungskonto</label>
                         <select onChange={(e) => setDebitAcc(e.target.value)} name="debitAcc" id="debitAcc" className="select w-full max-w-xs" required={true}>
-                            <option disabled value>Wähle ein Belastungskonto aus</option>
+                            <option disabled selected>Wähle ein Belastungskonto aus</option>
                             {debitAccs.map((account) => (
                                 <option key={account.value} value={account.value}>{account.label}</option>
                             ))}
@@ -106,7 +114,7 @@ export default function AccountTransfer() {
                     <div>
                         <label htmlFor="creditAcc" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Gutschriftskonto</label>
                         <select onChange={(e) => setCreditAcc(e.target.value)} name="creditAcc" id="creditAcc" className="select w-full max-w-xs" required={true}>
-                            <option disabled value>Wähle ein Gutschriftskonto aus</option>
+                            <option disabled selected>Wähle ein Gutschriftskonto aus</option>
                             {accounts.map((account) => (
                                 <option key={account.value} value={account.value}>{account.label}</option>
                             ))}
