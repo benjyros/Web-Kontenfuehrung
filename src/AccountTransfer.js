@@ -71,12 +71,10 @@ export default function AccountTransfer() {
             if (Number(debitDoc.data().balance) < Number(amount)) {
                 alert("Der Betrag ist zu hoch als das Ihr Konto zur Verfügung hat.");
             } else {
-
                 updateDoc(debitRef, {
                     balance: (Number(debitDoc.data().balance) - Number(amount))
                 });
-
-
+                
                 creditSnap.then((creditDoc) => {
                     updateDoc(creditRef, {
                         balance: (Number(creditDoc.data().balance) + Number(amount))
