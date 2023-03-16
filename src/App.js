@@ -5,6 +5,7 @@ import Home from './Home';
 import Login from './Login';
 import Registration from './Registration';
 import CreateAccount from './CreateAccount';
+import AccountTransfer from './AccountTransfer';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path='/home' element={<Home />} />
         <Route path='/registration' element={<Registration />} />
         <Route path='/createAccount' element={<CreateAccount />} />
+        <Route path='/accountTransfer' element={<AccountTransfer />} />
       </Routes>
     </div>
 
