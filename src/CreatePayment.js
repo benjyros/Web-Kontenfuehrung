@@ -95,7 +95,7 @@ export default function CreatePayment() {
             .then((userSnap) => {
                 createTransferDoc(auth.currentUser.uid, creditorId, receiverSurname, receiverName, userSnap.data().surname, userSnap.data().name, debitAcc, iban, amount, comment, "Zahlung");
             })
-        navigate('/Web-Kontenfuehrung/home', { replace: true });
+        navigate('/', { replace: true });
     }
 
     return (

@@ -90,7 +90,7 @@ export default function AccountTransfer() {
         .then((userSnap) => {
             createTransferDoc(auth.currentUser.uid, auth.currentUser.uid, userSnap.data().surname, userSnap.data().name, userSnap.data().surname, userSnap.data().name, debitAcc, creditAcc, amount, comment, "Kontoübertrag");
         })
-        navigate('/Web-Kontenfuehrung/home', { replace: true });;
+        navigate('/', { replace: true });;
     }
 
     return (
