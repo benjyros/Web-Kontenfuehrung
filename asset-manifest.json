@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Web-Kontenfuehrung/static/css/main.5c5dba51.css",
+    "main.js": "/Web-Kontenfuehrung/static/js/main.1dc9cb84.js",
+    "index.html": "/Web-Kontenfuehrung/index.html",
+    "main.5c5dba51.css.map": "/Web-Kontenfuehrung/static/css/main.5c5dba51.css.map",
+    "main.1dc9cb84.js.map": "/Web-Kontenfuehrung/static/js/main.1dc9cb84.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5c5dba51.css",
+    "static/js/main.1dc9cb84.js"
+  ]
+}
