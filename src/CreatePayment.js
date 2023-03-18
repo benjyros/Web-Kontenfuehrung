@@ -15,21 +15,35 @@ export default function CreatePayment() {
     const [comment, setComment] = useState("");
     const [amount, setAmount] = useState("");
 
+    const [loading, setLoading] = useState(true);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         function fetchData() {
-            getDocs(collection(firestore, "users", auth.currentUser.uid, "accounts"), where("type", "==", "Privatkonto"))
-                .then((snapshot) => {
-                    snapshot.forEach((doc) => {
-                        setDebitAcc(doc.data().iban);
-                        setBalance(doc.data().balance)
-                    })
-                }).catch((error) => {
-                    console.log("Error getting documents: ", error);
-                });
+            try {
+                getDocs(collection(firestore, "users", auth.currentUser.uid, "accounts"), where("type", "==", "Privatkonto"))
+                    .then((snapshot) => {
+                        snapshot.forEach((doc) => {
+                            setDebitAcc(doc.data().iban);
+                            setBalance(doc.data().balance)
+                        })
+                    }).catch((error) => {
+                        console.log("Error getting documents: ", error);
+                    });
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
         };
-        fetchData();
+
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                fetchData();
+            }
+        });
+        return unsubscribe;
     }, []);
 
     const preTransfer = (event) => {
@@ -96,6 +110,10 @@ export default function CreatePayment() {
                 createTransferDoc(auth.currentUser.uid, creditorId, receiverSurname, receiverName, userSnap.data().surname, userSnap.data().name, debitAcc, iban, amount, comment, "Zahlung");
             })
         navigate('/', { replace: true });
+    }
+
+    if (loading) {
+        return <div>Loading...</div>;
     }
 
     return (

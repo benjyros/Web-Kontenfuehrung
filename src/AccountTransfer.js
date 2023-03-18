@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import createTransferDoc from "./functions/transaction";
 
 import { auth, firestore } from "./config";
+import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, collection, getDocs, query, where, updateDoc } from "firebase/firestore";;
 
 export default function AccountTransfer() {
@@ -15,40 +16,53 @@ export default function AccountTransfer() {
     const [accounts, setAccounts] = useState([]);
     const [debitAccs, setDebitAccs] = useState([]);
 
+    const [loading, setLoading] = useState(true);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         function fetchData() {
-            // Defining all types of accounts
-            var types = ["Privatkonto", "Sparkonto"];
-            // Defining array for all accounts
-            var debitAccs = [];
-            var accounts = [];
-            //Looping through all types of accounts
-            for (let i = 0; i < types.length; i++) {
-                getDocs(query(collection(firestore, "users", auth.currentUser.uid, "accounts"), where("type", "==", types[i])))
-                    .then((snapshot) => {
-                        snapshot.forEach((doc) => {
-                            const newAccount = {
-                                label: doc.data().name + ": " + doc.data().iban + " - " + doc.data().balance + " CHF",
-                                value: doc.data().iban
-                            };
-                            // Put datas into array for all accounts
-                            if (doc.data().balance != "0") {
-                                debitAccs[debitAccs.length] = newAccount;
-                            }
-                            accounts[accounts.length] = newAccount;
+            try {
+                // Defining all types of accounts
+                var types = ["Privatkonto", "Sparkonto"];
+                // Defining array for all accounts
+                var debitAccs = [];
+                var accounts = [];
+                //Looping through all types of accounts
+                for (let i = 0; i < types.length; i++) {
+                    getDocs(query(collection(firestore, "users", auth.currentUser.uid, "accounts"), where("type", "==", types[i])))
+                        .then((snapshot) => {
+                            snapshot.forEach((doc) => {
+                                const newAccount = {
+                                    label: doc.data().name + ": " + doc.data().iban + " - " + doc.data().balance + " CHF",
+                                    value: doc.data().iban
+                                };
+                                // Put datas into array for all accounts
+                                if (doc.data().balance != "0") {
+                                    debitAccs[debitAccs.length] = newAccount;
+                                }
+                                accounts[accounts.length] = newAccount;
+                            });
+                            // Set useState with the accounts
+                            setAccounts(accounts);
+                            setDebitAccs(debitAccs);
+                        }).catch((error) => {
+                            console.log("Error getting documents: ", error);
                         });
-                        // Set useState with the accounts
-                        setAccounts(accounts);
-                        setDebitAccs(debitAccs);
-                    }).catch((error) => {
-                        console.log("Error getting documents: ", error);
-                    });
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
             }
-
         };
-        fetchData();
+
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                fetchData();
+            }
+        });
+        return unsubscribe;
     }, []);
 
     const preTransfer = (event) => {
@@ -74,7 +88,7 @@ export default function AccountTransfer() {
                 updateDoc(debitRef, {
                     balance: (Number(debitDoc.data().balance) - Number(amount))
                 });
-                
+
                 creditSnap.then((creditDoc) => {
                     updateDoc(creditRef, {
                         balance: (Number(creditDoc.data().balance) + Number(amount))
@@ -87,10 +101,14 @@ export default function AccountTransfer() {
 
     const createTransaction = () => {
         getDoc(doc(firestore, "users", auth.currentUser.uid))
-        .then((userSnap) => {
-            createTransferDoc(auth.currentUser.uid, auth.currentUser.uid, userSnap.data().surname, userSnap.data().name, userSnap.data().surname, userSnap.data().name, debitAcc, creditAcc, amount, comment, "Kontoübertrag");
-        })
+            .then((userSnap) => {
+                createTransferDoc(auth.currentUser.uid, auth.currentUser.uid, userSnap.data().surname, userSnap.data().name, userSnap.data().surname, userSnap.data().name, debitAcc, creditAcc, amount, comment, "Kontoübertrag");
+            })
         navigate('/', { replace: true });;
+    }
+
+    if (loading) {
+        return <div>Loading...</div>;
     }
 
     return (
