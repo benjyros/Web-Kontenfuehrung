@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 import { auth, firestore } from "../config";
-import { signOut } from 'firebase/auth';
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 export default function Accounts() {
     const [accounts, setAccounts] = useState([]);
-    const [selected, setSelected] = useState("");
+    const [selected, setSelected] = useState(0);
     const [loading, setLoading] = useState(true);
 
     const selectedAccount = accounts.find(({ id }) => id === selected);
