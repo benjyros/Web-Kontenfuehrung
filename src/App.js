@@ -6,6 +6,7 @@ import Login from './Login';
 import Registration from './Registration';
 import CreateAccount from './CreateAccount';
 import AccountTransfer from './AccountTransfer';
+import CreatePayment from './CreatePayment';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path='/registration' element={<Registration />} />
         <Route path='/createAccount' element={<CreateAccount />} />
         <Route path='/accountTransfer' element={<AccountTransfer />} />
+        <Route path='/createPayment' element={<CreatePayment />} />
       </Routes>
     </div>
 
