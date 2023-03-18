@@ -100,22 +100,24 @@ export default function Accounts() {
                     </button>
                 ))}
             </div>
-            <div>
-                <h2>Transaktionen</h2>
-                {selectedAccount.transactions.map((transactionGroup) => (
-                    <details key={transactionGroup.date}>
-                        <summary>{transactionGroup.date}</summary>
-                        <ul>
-                            {transactionGroup.todaysTransactions.map((transaction) => (
-                                <li key={transaction.comment}>
-                                    <strong>{transaction.type}:</strong> {transaction.amount} - {transaction.who}
-                                    <p>Kommentar: {transaction.comment}</p>
-                                </li>
-                            ))}
-                        </ul>
-                    </details>
-                ))}
-            </div>
+            {selectedAccount && (
+                <div>
+                    <h2>Transaktionen</h2>
+                    {selectedAccount.transactions.map((transactionGroup) => (
+                        <details key={transactionGroup.date}>
+                            <summary>{transactionGroup.date}</summary>
+                            <ul>
+                                {transactionGroup.todaysTransactions.map((transaction) => (
+                                    <li key={transaction.comment}>
+                                        <strong>{transaction.type}:</strong> {transaction.amount} - {transaction.who}
+                                        <p>Kommentar: {transaction.comment}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </details>
+                    ))}
+                </div>
+            )}
         </section>
     );
 }
