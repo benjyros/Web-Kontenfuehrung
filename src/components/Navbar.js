@@ -10,7 +10,7 @@ function Navbar() {
     // Event handler when signing out
     const handleSignOut = () => {
         signOut(auth).then(() => {
-            navigate('/login', { replace: true });
+            navigate('/Web-Kontenfuehrung/login', { replace: true });
         })
             .catch((error) => {
                 alert(error.message);
@@ -25,18 +25,18 @@ function Navbar() {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                     </label>
                     <ul tabIndex="0" className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-                        <li><Link to='/createPayment'>Zahlung erfassen</Link></li>
-                        <li><Link to='/accountTransfer'>Kontoübertrag</Link></li>
-                        <li><Link to='/createAccount'>Sparkonto erstellen</Link></li>
+                        <li><Link to='/Web-Kontenfuehrung/createPayment'>Zahlung erfassen</Link></li>
+                        <li><Link to='/Web-Kontenfuehrung/accountTransfer'>Kontoübertrag</Link></li>
+                        <li><Link to='/Web-Kontenfuehrung/createAccount'>Sparkonto erstellen</Link></li>
                     </ul>
                 </div>
                 <Link to='/login' className="btn btn-ghost normal-case text-xl">Twäwis</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
-                    <li><Link to='/createPayment'>Zahlung erfassen</Link></li>
-                    <li><Link to='/accountTransfer'>Kontoübertrag</Link></li>
-                    <li><Link to='/createAccount'>Sparkonto erstellen</Link></li>
+                    <li><Link to='/Web-Kontenfuehrung/createPayment'>Zahlung erfassen</Link></li>
+                    <li><Link to='/Web-Kontenfuehrung/accountTransfer'>Kontoübertrag</Link></li>
+                    <li><Link to='/Web-Kontenfuehrung/createAccount'>Sparkonto erstellen</Link></li>
                 </ul>
             </div>
             <div className="navbar-end">

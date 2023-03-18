@@ -13,7 +13,7 @@ export default function Login() {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                navigate('/home', { replace: true });
+                navigate('/Web-Kontenfuehrung/home', { replace: true });
             } else {
             }
             return unsubscribe;
@@ -62,7 +62,7 @@ export default function Login() {
                             </div>
                             <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-black dark:hover:bg-black-900 dark:focus:ring-gray-800">Log In</button>
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                Noch kein Konto? <Link to='/registration' className="font-medium text-white hover:underline">Hier Registrieren</Link>
+                                Noch kein Konto? <Link to='/Web-Kontenfuehrung/registration' className="font-medium text-white hover:underline">Hier Registrieren</Link>
                             </p>
                         </form>
                     </div>
