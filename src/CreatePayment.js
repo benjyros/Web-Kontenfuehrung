@@ -95,7 +95,7 @@ export default function CreatePayment() {
             .then((userSnap) => {
                 createTransferDoc(auth.currentUser.uid, creditorId, receiverSurname, receiverName, userSnap.data().surname, userSnap.data().name, debitAcc, iban, amount, comment, "Zahlung");
             })
-        navigate('/home', { replace: true });
+        navigate('/Web-Kontenfuehrung/home', { replace: true });
     }
 
     return (
@@ -131,7 +131,7 @@ export default function CreatePayment() {
                     </div>
                     <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800">Ausführen</button>
                     <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                        <Link to='/home' className="font-medium text-emerald-600 hover:underline dark:text-emerald-500">Abbrechen</Link>
+                        <Link to='/Web-Kontenfuehrung/home' className="font-medium text-emerald-600 hover:underline dark:text-emerald-500">Abbrechen</Link>
                     </p>
                 </form>
             </div>
