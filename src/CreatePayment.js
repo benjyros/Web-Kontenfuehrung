@@ -18,7 +18,7 @@ export default function CreatePayment() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        async function fetchData() {
+        function fetchData() {
             getDocs(collection(firestore, "users", auth.currentUser.uid, "accounts"), where("type", "==", "Privatkonto"))
                 .then((snapshot) => {
                     snapshot.forEach((doc) => {
@@ -34,10 +34,9 @@ export default function CreatePayment() {
 
     const preTransfer = (event) => {
         event.preventDefault();
-        if(debitAcc === iban){
+        if (debitAcc === iban) {
             alert("Sie können nicht Ihr eigenes Privatkonto angeben.");
-        }
-        else if (amount === "") {
+        } else if (amount === "") {
             alert("Bitte geben Sie einen Betrag ein.");
         } else if (iban != "" && surname != "" && name != "") {
             tranfer();
@@ -57,8 +56,7 @@ export default function CreatePayment() {
                         .then((snapshot2) => {
                             if (snapshot2.empty) {
                                 alert("Die IBAN existiert nicht.")
-                            }
-                            else {
+                            } else {
                                 const debitRef = doc(firestore, "users", auth.currentUser.uid, "accounts", debitAcc);
                                 const creditRef = doc(firestore, "users", document.data().id, "accounts", iban);
 
@@ -92,20 +90,12 @@ export default function CreatePayment() {
             });
     }
 
-    const createTransaction = async (creditorId, receiverSurname, receiverName) => {
+    const createTransaction = (creditorId, receiverSurname, receiverName) => {
         getDoc(doc(firestore, "users", auth.currentUser.uid))
             .then((userSnap) => {
                 createTransferDoc(auth.currentUser.uid, creditorId, receiverSurname, receiverName, userSnap.data().surname, userSnap.data().name, debitAcc, iban, amount, comment, "Zahlung");
             })
         navigate('/home', { replace: true });
-    }
-
-    function handleChange(amount) {
-        if (isNaN(amount)) {
-            setAmount("");
-        } else {
-            setAmount(amount);
-        }
     }
 
     return (
