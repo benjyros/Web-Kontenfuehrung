@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './Home';
 import Login from './Login';
@@ -12,7 +12,7 @@ function App() {
   return (
     <div className='App'>
       <Routes>
-      <Route path='/' element={<Home />} />
+        <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/registration' element={<Registration />} />
         <Route path='/createAccount' element={<CreateAccount />} />

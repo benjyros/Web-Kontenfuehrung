@@ -27,7 +27,7 @@ export default function CreateAccount() {
             interest: interest,
             balance: 0,
         });
-        navigate('/Web-Kontenfuehrung/home', { replace: true });
+        navigate('/', { replace: true });
     }
 
     return (
