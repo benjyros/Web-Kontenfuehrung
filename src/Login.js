@@ -14,7 +14,6 @@ export default function Login() {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 navigate('/Web-Kontenfuehrung/home', { replace: true });
-            } else {
             }
             return unsubscribe;
         });
