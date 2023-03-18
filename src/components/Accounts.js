@@ -6,7 +6,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 
 export default function Accounts() {
     const [accounts, setAccounts] = useState([]);
-    const [selected, setSelected] = useState(1);
+    const [selected, setSelected] = useState("");
     const [loading, setLoading] = useState(true);
 
     const selectedAccount = accounts.find(({ id }) => id === selected);
@@ -16,10 +16,10 @@ export default function Accounts() {
             try {
                 const types = ["Privatkonto", "Sparkonto"];
                 const accounts = [];
+                let count = 0;
 
                 for (let i = 0; i < types.length; i++) {
                     const querySnapshot = await getDocs(query(collection(firestore, "users", auth.currentUser.uid, "accounts"), where("type", "==", types[i])));
-
                     const accountPromises = querySnapshot.docs.map(async (doc) => {
                         const transactionsRef = collection(firestore, "users", auth.currentUser.uid, "accounts", doc.data().iban, "transactions");
 
@@ -29,15 +29,13 @@ export default function Accounts() {
 
                         transactionsSnapshot.forEach((transactionDoc) => {
                             const todaysTransactionsRef = collection(transactionsRef, transactionDoc.data().date, "todaysTransactions");
-
                             const todaysTransactionsPromise = getDocs(todaysTransactionsRef).then((todaysTransactionsSnapshot) => {
                                 const todaysTransactions = todaysTransactionsSnapshot.docs.map((todaysTransactionDoc) => ({
                                     type: todaysTransactionDoc.data().type,
                                     amount: todaysTransactionDoc.data().amount,
                                     who: todaysTransactionDoc.data().who,
                                     comment: todaysTransactionDoc.data().comment,
-                                })
-                                );
+                                }));
 
                                 return { date: transactionDoc.data().date, todaysTransactions };
                             });
@@ -50,7 +48,8 @@ export default function Accounts() {
                         );
 
                         const newAccount = {
-                            id: accounts.length + 1,
+                            id: count++,
+                            iban: doc.data().iban,
                             name: doc.data().name,
                             balance: doc.data().balance + " CHF",
                             interest: doc.data().interest + "%",
@@ -87,41 +86,36 @@ export default function Accounts() {
 
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Account Name</th>
-                        <th>Balance</th>
-                        <th>Interest</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {accounts.map((account) => (
-                        <tr key={account.id} onClick={() => setSelected(account.id)}>
-                            <td>{account.name}</td>
-                            <td>{account.balance}</td>
-                            <td>{account.interest}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            {selectedAccount && (
-                <div>
-                    <h2>{selectedAccount.name}</h2>
-                    {selectedAccount.transactions.map((transactionGroup) => (
-                        <details key={transactionGroup.date}>
-                            <summary>{transactionGroup.date}</summary>
-                            <ul>
-                                {transactionGroup.todaysTransactions.map((transaction) => (
-                                    <li key={transaction.comment}>
-                                        <strong>{transaction.type}</strong> - {transaction.amount} - {transaction.who} - {transaction.comment}
-                                    </li>
-                                ))}
-                            </ul>
-                        </details>
-                    ))}
-                </div>
-            )}
+            <div className="flex flex-row overflow-x-auto">
+                {accounts.map((account) => (
+                    <button
+                        key={account.id}
+                        className={`${selected === account.id ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                            } p-4 rounded-md mx-2`}
+                        onClick={() => { setSelected(account.id) }}
+                    >
+                        <div className="font-bold">{account.name}</div>
+                        <div>{account.balance}</div>
+                        <div>{account.interest}</div>
+                    </button>
+                ))}
+            </div>
+            <div>
+                <h2>Transaktionen</h2>
+                {selectedAccount.transactions.map((transactionGroup) => (
+                    <details key={transactionGroup.date}>
+                        <summary>{transactionGroup.date}</summary>
+                        <ul>
+                            {transactionGroup.todaysTransactions.map((transaction) => (
+                                <li key={transaction.comment}>
+                                    <strong>{transaction.type}:</strong> {transaction.amount} - {transaction.who}
+                                    <p>Kommentar: {transaction.comment}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </details>
+                ))}
+            </div>
         </section>
     );
 }
