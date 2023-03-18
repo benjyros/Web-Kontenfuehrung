@@ -13,7 +13,7 @@ export default function Home() {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (!user) {
-                navigate('/Web-Kontenfuehrung/login', { replace: true });
+                navigate('/login', { replace: true });
             }
             return unsubscribe;
         });

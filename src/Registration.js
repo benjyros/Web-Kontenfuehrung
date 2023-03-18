@@ -51,7 +51,7 @@ function Registration() {
             interest: "0.1",
             balance: 50,
         });
-        navigate('/Web-Kontenfuehrung/home', { replace: true });
+        navigate('/', { replace: true });
     }
 
     // Function for creating user
@@ -105,7 +105,7 @@ function Registration() {
                             </div>
                             <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800">Abschliessen</button>
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                Schon ein Konto? <Link to='/Web-Kontenfuehrung/login' className="font-medium text-emerald-600 hover:underline dark:text-emerald-500">Hier Anmelden</Link>
+                                Schon ein Konto? <Link to='/login' className="font-medium text-emerald-600 hover:underline dark:text-emerald-500">Hier Anmelden</Link>
                             </p>
                         </form>
                     </div>
