@@ -7,23 +7,19 @@ import Registration from './Registration';
 import CreateAccount from './CreateAccount';
 import AccountTransfer from './AccountTransfer';
 import CreatePayment from './CreatePayment';
-import RemoveHash from './components/RemoveHash';
 
 function App() {
   return (
     <div className='App'>
-      <RemoveHash>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/registration' element={<Registration />} />
-          <Route path='/createAccount' element={<CreateAccount />} />
-          <Route path='/accountTransfer' element={<AccountTransfer />} />
-          <Route path='/createPayment' element={<CreatePayment />} />
-        </Routes>
-      </RemoveHash>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/registration' element={<Registration />} />
+        <Route path='/createAccount' element={<CreateAccount />} />
+        <Route path='/accountTransfer' element={<AccountTransfer />} />
+        <Route path='/createPayment' element={<CreatePayment />} />
+      </Routes>
     </div>
-
   );
 }
 
