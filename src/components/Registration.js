@@ -19,8 +19,7 @@ function Registration() {
 
     const handleSignUp = () => {
         createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredentials) => {
-                const user = userCredentials.user;
+            .then(() => {
                 // Add created user to database
                 addUserToDB();
             })

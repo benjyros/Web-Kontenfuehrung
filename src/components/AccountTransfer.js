@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import createTransferDoc from "../functions/transaction";
 
 import { auth, firestore } from "../config";
-import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, collection, getDocs, query, where, updateDoc } from "firebase/firestore";;
 
 export default function AccountTransfer() {

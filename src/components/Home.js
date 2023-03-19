@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../config';
 import { onAuthStateChanged } from 'firebase/auth';
 
-import Navbar from './Navbar';
 import Accounts from './Accounts';
 
 export default function Home() {

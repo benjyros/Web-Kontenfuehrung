@@ -22,9 +22,6 @@ export default function Login() {
     const handleSignIn = (event) => {
         event.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
-            .then((userCredentials) => {
-                const user = userCredentials.user;
-            })
             .catch((error) => {
                 console.log(error);
                 alert("Dieses Konto existiert nicht oder die Angaben sind inkorrekt.");
