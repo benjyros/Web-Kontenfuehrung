@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import Navbar from './Navbar';
 import createTransferDoc from "../functions/transaction";
 
 import { auth, firestore } from "../config";
@@ -113,11 +114,12 @@ export default function CreatePayment() {
     }
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className='flex h-screen items-center justify-center'><h1 className='text-2xl font-bold text-center'>Loading...</h1></div>;
     }
 
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
+            <Navbar />
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                     Zahlung erfassen
