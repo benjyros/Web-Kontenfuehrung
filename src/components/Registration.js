@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 
+import '../App.css';
+
 import createIban from '../functions/iban';
 
 import { auth, firestore } from "../config";
@@ -71,7 +73,7 @@ function Registration() {
     }
 
     return (
-        <section className="bg-gray-50 dark:bg-gray-900">
+        <section className="bg-[#3F2045]">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                 <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -99,12 +101,12 @@ function Registration() {
                                     <input id="terms" aria-describedby="terms" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required="true" />
                                 </div>
                                 <div className="ml-3 text-sm">
-                                    <label htmlFor="terms" className="font-light text-gray-500 dark:text-gray-300">I accept the <a className="font-medium text-emerald-600 hover:underline dark:text-emerald-500" href="#">Terms and Conditions</a></label>
+                                    <label htmlFor="terms" className="font-light text-gray-500 dark:text-gray-300">Ich akzeptiere die <a className="text-sm font-medium text-white hover:underline" href="#">allgemeinen Geschäftsbedingungen</a></label>
                                 </div>
                             </div>
-                            <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800">Abschliessen</button>
+                            <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-black dark:hover:bg-black-900 dark:focus:ring-gray-800">Abschliessen</button>
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                Schon ein Konto? <Link to='/login' className="font-medium text-emerald-600 hover:underline dark:text-emerald-500">Hier Anmelden</Link>
+                                Schon ein Konto? <Link to='/login' className="font-medium text-white hover:underline">Hier Anmelden</Link>
                             </p>
                         </form>
                     </div>
