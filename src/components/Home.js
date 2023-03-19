@@ -1,14 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { auth, firestore } from "../config";
+import Navbar from './Navbar';
+
+import { auth, firestore} from '../config';
+import { onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs, query, where } from "firebase/firestore";
 
-export default function Accounts() {
+export default function Home() {
     const [accounts, setAccounts] = useState([]);
     const [selected, setSelected] = useState(0);
     const [loading, setLoading] = useState(true);
 
     const selectedAccount = accounts.find(({ id }) => id === selected);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {
@@ -71,20 +77,23 @@ export default function Accounts() {
             }
         }
 
-        const unsubscribe = auth.onAuthStateChanged((user) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 fetchData();
+            } else {
+                navigate('/login', { replace: true });
             }
         });
         return unsubscribe;
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className='flex h-screen items-center justify-center'><h1 className='text-2xl font-bold text-center'>Loading...</h1></div>;
     }
 
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
+            <Navbar />
             <div className="flex flex-row overflow-x-auto">
                 {accounts.map((account) => (
                     <button

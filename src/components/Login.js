@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { auth } from './config';
+import { auth } from '../config';
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function Login() {
@@ -22,9 +22,6 @@ export default function Login() {
     const handleSignIn = (event) => {
         event.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
-            .then((userCredentials) => {
-                const user = userCredentials.user;
-            })
             .catch((error) => {
                 console.log(error);
                 alert("Dieses Konto existiert nicht oder die Angaben sind inkorrekt.");
