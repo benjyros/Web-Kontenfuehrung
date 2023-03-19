@@ -89,8 +89,7 @@ export default function Accounts() {
                 {accounts.map((account) => (
                     <button
                         key={account.id}
-                        className={`${selected === account.id ? 'bg-blue-500 text-white' : 'bg-gray-200'
-                            } p-4 rounded-md mx-2`}
+                        className={`${selected === account.id ? 'bg-blue-500 text-white' : 'bg-gray-200'} p-4 rounded-md mx-2`}
                         onClick={() => { setSelected(account.id) }}
                     >
                         <div className="font-bold">{account.name}</div>

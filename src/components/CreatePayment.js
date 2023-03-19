@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import createTransferDoc from "./functions/transaction";
+import createTransferDoc from "../functions/transaction";
 
-import { auth, firestore } from "./config";
+import { auth, firestore } from "../config";
 import { doc, getDoc, collection, getDocs, where, updateDoc, query } from "firebase/firestore";
 
 export default function CreatePayment() {

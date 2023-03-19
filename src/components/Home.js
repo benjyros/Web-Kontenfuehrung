@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { auth } from './config';
+import { auth } from '../config';
 import { onAuthStateChanged } from 'firebase/auth';
 
-import Navbar from './components/Navbar';
-import Accounts from './components/Accounts';
+import Navbar from './Navbar';
+import Accounts from './Accounts';
 
 export default function Home() {
     const navigate = useNavigate();
@@ -21,7 +21,6 @@ export default function Home() {
 
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
-            <Navbar />
             <Accounts />
         </section>
     );

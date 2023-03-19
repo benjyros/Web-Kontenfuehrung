@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { auth } from './config';
+import { auth } from '../config';
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function Login() {

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 
-import createIban from './functions/iban';
+import createIban from '../functions/iban';
 
-import { auth, firestore } from "./config";
+import { auth, firestore } from "../config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
